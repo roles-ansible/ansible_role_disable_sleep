@@ -1,0 +1,30 @@
+---
+- include_tasks: versioncheck.yml
+  when: submodules_versioncheck|bool
+
+- name: disable sleep.target
+  become: true
+  systemd:
+    name: sleep.target
+    masked: yes
+
+- name: disable suspend.target
+  become: true
+  systemd:
+    name: suspend.target
+    masked: yes
+
+- name: disable hibernate.target
+  become: true
+  systemd:
+    name: hibernate.target
+    masked: yes
+
+- name: disable hybrid-sleep.target
+  become: true
+  systemd:
+    name: hybrid-sleep.target
+    masked: yes
+
+
+
