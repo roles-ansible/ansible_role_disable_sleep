@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  author: L3D
+  description: Disable (or manage) your screen saver and sleep/suspend of your linux system
+  license: "MIT"
+  min_ansible_version: 2.3
+  github_branch: master
+  platforms:
+    - name: Archlinux
+      versions: all
+    - name: Debian
+      versions: all
+    - name: Ubuntu
+      versions: all
+    - name: Fedora
+      versions: all
+  galaxy_tags:
+    - sleep
+    - suspend
+    - screen
+    - i3wm
+    - screensaver
+    - suspendion
+    - sleeping
+    - arch
+dependencies: []
