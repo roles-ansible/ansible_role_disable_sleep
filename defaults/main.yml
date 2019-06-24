@@ -8,4 +8,5 @@ submodules_versioncheck: true
 mask_sleep_target: true
 mask_suspend_target: true
 mask_hibernate_target: true
+mask_hybrid-sleep_target: true
 temporarily_disable_screensaver: true
