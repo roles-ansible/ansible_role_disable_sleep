@@ -67,5 +67,3 @@
   become: true
   command: "xset -dpms"
   when: temporarily_disable_screensaver | bool
-
-
