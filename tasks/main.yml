@@ -49,14 +49,14 @@
   systemd:
     name: hybrid-sleep.target
     masked: yes
-  when: mask_hybrid-sleep_target | bool
+  when: mask_hybrid_sleep_target | bool
 
 - name: allow hybrid-sleep.target
   become: true
   systemd:
     name: hybrid-sleep.target
     masked: no
-  when: not mask_hybrid-sleep_target | bool
+  when: not mask_hybrid_sleep_target | bool
 
 - name: temporarily disable screensaver
   become: true
