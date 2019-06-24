@@ -1,3 +1,11 @@
 ---
 # version check for this role?
 submodules_versioncheck: true
+
+# which systemd targets should be masked (-> disabled)
+## true means, the target is permanently disabled.
+## false unmask the target
+mask_sleep_target: true
+mask_suspend_target: true
+mask_hibernate_target: true
+temporarily_disable_screensaver: true

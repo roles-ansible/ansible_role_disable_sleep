@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   author: L3D
+  role_name: no_sleep
   description: Disable (or manage) your screen saver and sleep/suspend of your linux system
   license: "MIT"
   min_ansible_version: 2.3
