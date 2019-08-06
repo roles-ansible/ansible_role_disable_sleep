@@ -62,8 +62,10 @@
   become: true
   command: "xset s off"
   when: temporarily_disable_screensaver | bool
+  changed_when: false
 
 - name: temporarily disable screensaver
   become: true
   command: "xset -dpms"
   when: temporarily_disable_screensaver | bool
+  changed_when: false
