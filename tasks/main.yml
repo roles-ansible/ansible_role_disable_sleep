@@ -71,3 +71,11 @@
   when: temporarily_disable_screensaver | bool
   changed_when: false
   failed_when: false
+
+- name: disable lxde screensaver if present
+  become: true
+  lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    state: absent
+    regexp: '^@xscreensaver'
+  failed_when: false
