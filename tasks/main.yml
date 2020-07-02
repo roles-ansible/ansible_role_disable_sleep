@@ -79,3 +79,9 @@
     state: absent
     regexp: '^@xscreensaver'
   failed_when: false
+
+- name: make sure xscreensaver is absent
+  become: true
+  package:
+    name: xscreensaver
+    state: absent
