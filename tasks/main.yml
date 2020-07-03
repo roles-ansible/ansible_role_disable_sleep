@@ -83,5 +83,9 @@
 - name: make sure xscreensaver is absent
   become: true
   package:
-    name: xscreensaver
+    name:
+      - xscreensaver
+      - lxlock
+      - ight-locker
+      - xscreensaver-data
     state: absent
