@@ -89,3 +89,13 @@
       - ight-locker
       - xscreensaver-data
     state: absent
+  when: remove_packages | bool
+
+- name: set lightdm xserver-command=X -s 0 dpms
+  become: true
+  lineinfile:
+    path: /etc/lightdm/lightdm.conf
+    regexp: '^xserver-command='
+    insertafter: '^#xserver-command='
+    line: "xserver-command=X -s 0 dpms"
+  when: modify_lightdm | bool
