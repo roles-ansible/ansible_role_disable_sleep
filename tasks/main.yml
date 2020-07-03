@@ -79,6 +79,38 @@
     state: absent
     regexp: '^@xscreensaver'
   failed_when: false
+  when: modify_lxde_autostart | bool
+
+- name: install x11-xserver-utils
+  become: true
+  package:
+    name: x11-xserver-utils
+    state: present
+  when: modify_lxde_autostart | bool
+
+- name: set lxde xset s noblank
+  become: true
+  lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    regexp: '^@xset s noblank'
+    line: "@xset s noblank"
+  when: modify_lxde_autostart | bool
+
+- name: set lxde xset s off
+  become: true
+  lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    regexp: '^@xset s off'
+    line: "@xset s off"
+  when: modify_lxde_autostart | bool
+
+- name: set lxde xset -dpms
+  become: true
+  lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    regexp: '^@xset -dpms'
+    line: "@xset -dpms"
+  when: modify_lxde_autostart | bool
 
 - name: make sure xscreensaver is absent
   become: true

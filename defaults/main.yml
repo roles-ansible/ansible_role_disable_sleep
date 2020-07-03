@@ -12,3 +12,4 @@ mask_hybrid_sleep_target: true
 temporarily_disable_screensaver: true
 remove_packages: true
 modify_lightdm: true
+modify_lxde_autostart: true
