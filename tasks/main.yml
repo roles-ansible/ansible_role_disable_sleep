@@ -81,12 +81,13 @@
   failed_when: false
   when: modify_lxde_autostart | bool
 
-- name: install x11-xserver-utils
+- name: install x11-xserver-utils if available
   become: true
   package:
     name: x11-xserver-utils
     state: present
   when: modify_lxde_autostart | bool
+  failed_when: false
 
 - name: set lxde xset s noblank
   become: true
