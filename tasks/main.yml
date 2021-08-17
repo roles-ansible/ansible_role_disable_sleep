@@ -124,6 +124,17 @@
     state: absent
   when: remove_packages | bool
 
+- name: check if /etc/lightdm/lightdm.conf is available
+  become: true
+  lineinfile:
+    path: /etc/lightdm/lightdm.conf
+    regexp: '^xserver-command='
+    insertafter: '^#xserver-command='
+    line: "xserver-command=X -s 0 dpms"
+  check_mode: true
+  register: check
+  when: modify_lightdm | bool
+
 - name: set lightdm xserver-command=X -s 0 dpms
   become: true
   lineinfile:
@@ -131,4 +142,6 @@
     regexp: '^xserver-command='
     insertafter: '^#xserver-command='
     line: "xserver-command=X -s 0 dpms"
-  when: modify_lightdm | bool
+  check_mode: true
+  register: check
+  when: modify_lightdm | bool and check.found == 0
