@@ -6,56 +6,56 @@
   become: true
   systemd:
     name: sleep.target
-    masked: yes
+    masked: true
   when: mask_sleep_target | bool
 
 - name: allow sleep.target
   become: true
   systemd:
     name: sleep.target
-    masked: no
+    masked: false
   when: not mask_sleep_target | bool
 
 - name: disable suspend.target
   become: true
   systemd:
     name: suspend.target
-    masked: yes
+    masked: true
   when: mask_suspend_target | bool
 
 - name: allow suspend.target
   become: true
   systemd:
     name: suspend.target
-    masked: no
+    masked: false
   when: not mask_suspend_target | bool
 
 - name: disable hibernate.target
   become: true
   systemd:
     name: hibernate.target
-    masked: yes
+    masked: true
   when: mask_hibernate_target | bool
 
 - name: allow hibernate.target
   become: true
   systemd:
     name: hibernate.target
-    masked: no
+    masked: false
   when: not mask_hibernate_target | bool
 
 - name: disable hybrid-sleep.target
   become: true
   systemd:
     name: hybrid-sleep.target
-    masked: yes
+    masked: true
   when: mask_hybrid_sleep_target | bool
 
 - name: allow hybrid-sleep.target
   become: true
   systemd:
     name: hybrid-sleep.target
-    masked: no
+    masked: false
   when: not mask_hybrid_sleep_target | bool
 
 - name: temporarily disable screensaver
