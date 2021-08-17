@@ -133,6 +133,7 @@
     line: "xserver-command=X -s 0 dpms"
   check_mode: true
   register: check
+  ignore_error: true
   when: modify_lightdm | bool
 
 - name: set lightdm xserver-command=X -s 0 dpms
