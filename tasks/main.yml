@@ -140,4 +140,6 @@
     line: "xserver-command=X -s 0 dpms"
   check_mode: true
   register: check
-  when: modify_lightdm | bool and check.exists | bool
+  when:
+    - modify_lightdm | bool
+    - check.stat.exists | bool
