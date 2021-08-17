@@ -126,14 +126,9 @@
 
 - name: check if /etc/lightdm/lightdm.conf is available
   become: true
-  lineinfile:
+  stat:
     path: /etc/lightdm/lightdm.conf
-    regexp: '^xserver-command='
-    insertafter: '^#xserver-command='
-    line: "xserver-command=X -s 0 dpms"
-  check_mode: true
   register: check
-  ignore_error: true
   when: modify_lightdm | bool
 
 - name: set lightdm xserver-command=X -s 0 dpms
@@ -145,4 +140,4 @@
     line: "xserver-command=X -s 0 dpms"
   check_mode: true
   register: check
-  when: modify_lightdm | bool and check.found == 0
+  when: modify_lightdm | bool and check.exists | bool
