@@ -1,121 +1,96 @@
 ---
-- include_tasks: versioncheck.yml
-  when: submodules_versioncheck|bool
+- name: Run Optional Versionscheck
+  ansible.builtin.include_tasks:
+    file: versioncheck.yml
+  when: submodules_versioncheck | bool
 
-- name: disable sleep.target
+- name: Run systemctl mask sleep.target
   become: true
-  systemd:
+  ansible.builtin.systemd:
     name: sleep.target
-    masked: true
-  when: mask_sleep_target | bool
+    masked: "{{ mask_sleep_target | bool }}"
 
-- name: allow sleep.target
+- name: Enable or Disable suspend.target
   become: true
-  systemd:
-    name: sleep.target
-    masked: false
-  when: not mask_sleep_target | bool
-
-- name: disable suspend.target
-  become: true
-  systemd:
+  ansible.builtin.systemd:
     name: suspend.target
-    masked: true
-  when: mask_suspend_target | bool
+    masked: "{{ mask_suspend_target | bool }}"
 
-- name: allow suspend.target
+- name: Mask or Unmask hibernate.target
   become: true
-  systemd:
-    name: suspend.target
-    masked: false
-  when: not mask_suspend_target | bool
-
-- name: disable hibernate.target
-  become: true
-  systemd:
+  ansible.builtin.systemd:
     name: hibernate.target
-    masked: true
-  when: mask_hibernate_target | bool
+    masked: "{{ mask_hibernate_target | bool }}"
 
-- name: allow hibernate.target
+- name: Mask or Unmask hybrid-sleep.target
   become: true
-  systemd:
-    name: hibernate.target
-    masked: false
-  when: not mask_hibernate_target | bool
-
-- name: disable hybrid-sleep.target
-  become: true
-  systemd:
+  ansible.builtin.systemd:
     name: hybrid-sleep.target
-    masked: true
-  when: mask_hybrid_sleep_target | bool
+    masked: "{{ mask_hybrid_sleep_target | bool }}"
 
-- name: allow hybrid-sleep.target
+- name: Temporarily disable screensaver via xset
   become: true
-  systemd:
-    name: hybrid-sleep.target
-    masked: false
-  when: not mask_hybrid_sleep_target | bool
-
-- name: temporarily disable screensaver
-  become: true
-  command: "xset s off"
+  ansible.builtin.command:
+    cmd: "xset s off"
   when: temporarily_disable_screensaver | bool
   changed_when: false
   failed_when: false
 
-- name: temporarily disable screensaver
+- name: Temporarily disable screensaver
   become: true
-  command: "xset -dpms"
+  ansible.builtin.command:
+    cmd: "xset -dpms"
   when: temporarily_disable_screensaver | bool
   changed_when: false
   failed_when: false
 
-- name: disable lxde screensaver if present
+- name: Disable lxde screensaver if present
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/xdg/lxsession/LXDE/autostart
     state: absent
     regexp: '^@xscreensaver'
   failed_when: false
   when: modify_lxde_autostart | bool
 
-- name: install x11-xserver-utils if available
+- name: Install x11-xserver-utils if available
   become: true
-  package:
-    name: x11-xserver-utils
+  ansible.builtin.package:
+    name: 'x11-xserver-utils'
     state: present
   when: modify_lxde_autostart | bool
   failed_when: false
 
-- name: set lxde xset s noblank
+- name: Set lxde xset s noblank
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/xdg/lxsession/LXDE/autostart
+    mode: '0644'
     regexp: '^@xset s noblank'
     line: "@xset s noblank"
   when: modify_lxde_autostart | bool
 
-- name: set lxde xset s off
+- name: Set lxde xset s off
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
+    mode: '0644'
     path: /etc/xdg/lxsession/LXDE/autostart
     regexp: '^@xset s off'
     line: "@xset s off"
   when: modify_lxde_autostart | bool
 
-- name: set lxde xset -dpms
+- name: Set lxde xset -dpms
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
+    mode: '0644'
     path: /etc/xdg/lxsession/LXDE/autostart
     regexp: '^@xset -dpms'
     line: "@xset -dpms"
   when: modify_lxde_autostart | bool
 
-- name: make sure xscreensaver is absent
+- name: Make sure xscreensaver is absent
   become: true
-  package:
+  ansible.builtin.package:
     name:
       - xscreensaver
       - lxlock
@@ -124,16 +99,17 @@
     state: absent
   when: remove_packages | bool
 
-- name: check if /etc/lightdm/lightdm.conf is available
+- name: Check if /etc/lightdm/lightdm.conf is available
   become: true
-  stat:
+  ansible.builtin.stat:
     path: /etc/lightdm/lightdm.conf
   register: check
   when: modify_lightdm | bool
 
-- name: set lightdm xserver-command=X -s 0 dpms
+- name: Set lightdm xserver-command=X -s 0 dpms
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
+    mode: '0644'
     path: /etc/lightdm/lightdm.conf
     regexp: '^xserver-command='
     insertafter: '^#xserver-command='

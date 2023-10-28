@@ -1,21 +1,22 @@
 ---
 galaxy_info:
   author: do1jlr
+  namespace: l3d
   role_name: no_sleep
-  description: Disable (or manage) your screen saver and sleep/suspend of your linux system
+  description: Disable your screen saver and sleep/suspend of your linux system using xset, systemd and some more
   license: "MIT"
-  min_ansible_version: 2.11
-  github_branch: master
+  min_ansible_version: "2.13"
   platforms:
-    - name: Archlinux
-      versions: all
+    - name: ArchLinux
+      versions: ['all']
     - name: Debian
-      versions: all
+      versions: ['all']
     - name: Ubuntu
-      versions: all
+      versions: ['all']
     - name: Fedora
-      versions: all
+      versions: ['all']
   galaxy_tags:
+    - linux
     - sleep
     - suspend
     - screen
