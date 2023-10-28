@@ -1,11 +1,6 @@
- configure your sleep
-==========================
-<a href="https://galaxy.ansible.com/do1jlr/no_sleep"><img width="80px" src="https://galaxy.ansible.com/assets/galaxy-logo-02.svg"/></a>
+ don't let your linux comouter sleep
+=====================================
 
-### Get it directly from Ansible Galaxy 
-```bash
-$ ansible-galaxy install do1jlr.no_sleep
-```
 
  Function:
 -----------
@@ -24,3 +19,6 @@ Have a look into the ``defaults`` Folder for all options!
  Something wrong?
 ---------------
 Please feel free to expand this role or open an issue if something is not working properly!
+
+**Maintainance:** poor
+*Pull-Requests will be reviews, but don't expect any improvements of this old ansible role. Use at your own risk!*
