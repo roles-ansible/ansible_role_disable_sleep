@@ -1,0 +1,32 @@
+---
+- name: Make sure xscreensaver is absent
+  become: true
+  ansible.builtin.package:
+    name:
+      - xscreensaver
+      - lxlock
+      - ight-locker
+      - xscreensaver-data
+    state: absent
+  when: remove_packages | bool
+
+- name: Check if /etc/lightdm/lightdm.conf is available
+  become: true
+  ansible.builtin.stat:
+    path: /etc/lightdm/lightdm.conf
+  register: check
+  when: modify_lightdm | bool
+
+- name: Set lightdm xserver-command=X -s 0 dpms
+  become: true
+  ansible.builtin.lineinfile:
+    mode: '0644'
+    path: /etc/lightdm/lightdm.conf
+    regexp: '^xserver-command='
+    insertafter: '^#xserver-command='
+    line: "xserver-command=X -s 0 dpms"
+  check_mode: true
+  register: check
+  when:
+    - modify_lightdm | bool
+    - check.stat.exists | bool

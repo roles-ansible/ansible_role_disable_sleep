@@ -1,0 +1,24 @@
+---
+- name: Run systemctl mask sleep.target
+  become: true
+  ansible.builtin.systemd:
+    name: sleep.target
+    masked: "{{ mask_sleep_target | bool }}"
+
+- name: Enable or Disable suspend.target
+  become: true
+  ansible.builtin.systemd:
+    name: suspend.target
+    masked: "{{ mask_suspend_target | bool }}"
+
+- name: Mask or Unmask hibernate.target
+  become: true
+  ansible.builtin.systemd:
+    name: hibernate.target
+    masked: "{{ mask_hibernate_target | bool }}"
+
+- name: Mask or Unmask hybrid-sleep.target
+  become: true
+  ansible.builtin.systemd:
+    name: hybrid-sleep.target
+    masked: "{{ mask_hybrid_sleep_target | bool }}"

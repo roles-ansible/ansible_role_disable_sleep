@@ -4,118 +4,18 @@
     file: versioncheck.yml
   when: submodules_versioncheck | bool
 
-- name: Run systemctl mask sleep.target
-  become: true
-  ansible.builtin.systemd:
-    name: sleep.target
-    masked: "{{ mask_sleep_target | bool }}"
+- name: Run Systemd sleep tasks
+  ansible.builtin.include_tasks:
+    file: systemd.yml
 
-- name: Enable or Disable suspend.target
-  become: true
-  ansible.builtin.systemd:
-    name: suspend.target
-    masked: "{{ mask_suspend_target | bool }}"
+- name: Run temporary nosleep tasks
+  ansible.builtin.include_tasks:
+    file: command.yml
 
-- name: Mask or Unmask hibernate.target
-  become: true
-  ansible.builtin.systemd:
-    name: hibernate.target
-    masked: "{{ mask_hibernate_target | bool }}"
+- name: Improve config files for no-sleep
+  ansible.builtin.include_tasks:
+    file: lineinfile.yml
 
-- name: Mask or Unmask hybrid-sleep.target
-  become: true
-  ansible.builtin.systemd:
-    name: hybrid-sleep.target
-    masked: "{{ mask_hybrid_sleep_target | bool }}"
-
-- name: Temporarily disable screensaver via xset
-  become: true
-  ansible.builtin.command:
-    cmd: "xset s off"
-  when: temporarily_disable_screensaver | bool
-  changed_when: false
-  failed_when: false
-
-- name: Temporarily disable screensaver
-  become: true
-  ansible.builtin.command:
-    cmd: "xset -dpms"
-  when: temporarily_disable_screensaver | bool
-  changed_when: false
-  failed_when: false
-
-- name: Disable lxde screensaver if present
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/xdg/lxsession/LXDE/autostart
-    state: absent
-    regexp: '^@xscreensaver'
-  failed_when: false
-  when: modify_lxde_autostart | bool
-
-- name: Install x11-xserver-utils if available
-  become: true
-  ansible.builtin.package:
-    name: 'x11-xserver-utils'
-    state: present
-  when: modify_lxde_autostart | bool
-  failed_when: false
-
-- name: Set lxde xset s noblank
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/xdg/lxsession/LXDE/autostart
-    mode: '0644'
-    regexp: '^@xset s noblank'
-    line: "@xset s noblank"
-  when: modify_lxde_autostart | bool
-
-- name: Set lxde xset s off
-  become: true
-  ansible.builtin.lineinfile:
-    mode: '0644'
-    path: /etc/xdg/lxsession/LXDE/autostart
-    regexp: '^@xset s off'
-    line: "@xset s off"
-  when: modify_lxde_autostart | bool
-
-- name: Set lxde xset -dpms
-  become: true
-  ansible.builtin.lineinfile:
-    mode: '0644'
-    path: /etc/xdg/lxsession/LXDE/autostart
-    regexp: '^@xset -dpms'
-    line: "@xset -dpms"
-  when: modify_lxde_autostart | bool
-
-- name: Make sure xscreensaver is absent
-  become: true
-  ansible.builtin.package:
-    name:
-      - xscreensaver
-      - lxlock
-      - ight-locker
-      - xscreensaver-data
-    state: absent
-  when: remove_packages | bool
-
-- name: Check if /etc/lightdm/lightdm.conf is available
-  become: true
-  ansible.builtin.stat:
-    path: /etc/lightdm/lightdm.conf
-  register: check
-  when: modify_lightdm | bool
-
-- name: Set lightdm xserver-command=X -s 0 dpms
-  become: true
-  ansible.builtin.lineinfile:
-    mode: '0644'
-    path: /etc/lightdm/lightdm.conf
-    regexp: '^xserver-command='
-    insertafter: '^#xserver-command='
-    line: "xserver-command=X -s 0 dpms"
-  check_mode: true
-  register: check
-  when:
-    - modify_lightdm | bool
-    - check.stat.exists | bool
+- name: Modify screensaver
+  ansible.builtin.include_tasks:
+    file: screensaver.yml

@@ -1,0 +1,44 @@
+---
+- name: Disable lxde screensaver if present
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    state: absent
+    regexp: '^@xscreensaver'
+  failed_when: false
+  when: modify_lxde_autostart | bool
+
+- name: Install x11-xserver-utils if available
+  become: true
+  ansible.builtin.package:
+    name: 'x11-xserver-utils'
+    state: present
+  when: modify_lxde_autostart | bool
+  failed_when: false
+
+- name: Set lxde xset s noblank
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/xdg/lxsession/LXDE/autostart
+    mode: '0644'
+    regexp: '^@xset s noblank'
+    line: "@xset s noblank"
+  when: modify_lxde_autostart | bool
+
+- name: Set lxde xset s off
+  become: true
+  ansible.builtin.lineinfile:
+    mode: '0644'
+    path: /etc/xdg/lxsession/LXDE/autostart
+    regexp: '^@xset s off'
+    line: "@xset s off"
+  when: modify_lxde_autostart | bool
+
+- name: Set lxde xset -dpms
+  become: true
+  ansible.builtin.lineinfile:
+    mode: '0644'
+    path: /etc/xdg/lxsession/LXDE/autostart
+    regexp: '^@xset -dpms'
+    line: "@xset -dpms"
+  when: modify_lxde_autostart | bool
